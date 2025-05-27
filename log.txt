@@ -1,0 +1,14 @@
+App is ready, initializing...
+Database path: /Users/sharmar/Library/Application Support/desktop-authenticator/authenticator.db
+CREATE TABLE IF NOT EXISTS accounts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        issuer TEXT,
+        secret TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    
+Database initialized successfully
+SELECT * FROM accounts
+Window finished loading
+Window loaded successfully

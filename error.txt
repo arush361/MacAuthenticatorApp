@@ -1,0 +1,2 @@
+[12386:0527/001552.984040:INFO:CONSOLE(255)] "DOM loaded, initializing app...", source: file:///Users/sharmar/Documents/Desktop%20Authenticator/dist/mac-arm64/Desktop%20Authenticator.app/Contents/Resources/app.asar/renderer.js (255)
+[12386:0527/001552.989791:INFO:CONSOLE(265)] "App initialized successfully", source: file:///Users/sharmar/Documents/Desktop%20Authenticator/dist/mac-arm64/Desktop%20Authenticator.app/Contents/Resources/app.asar/renderer.js (265)
