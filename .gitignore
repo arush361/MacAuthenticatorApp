@@ -1,0 +1,65 @@
+# Node modules (both in current and parent directories)
+node_modules/
+../node_modules/
+**/node_modules/
+
+# Electron build output
+dist/
+node_modules/electron/dist/
+**/Electron Framework.framework/**
+*.app
+
+# Build artifacts
+*.zip
+*.dmg
+*.blockmap
+
+# Dependencies
+npm-debug.log
+yarn-debug.log*
+yarn-error.log*
+
+# macOS specific
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+*.bak
+
+# Debug logs
+debug.log
+logs/
+*.log
+
+# Build process
+build/
+out/
+release/
+
+# Temporary files
+.tmp/
+.temp/
+
+dist/Desktop Authenticator-1.0.0-arm64-mac.zip
+*.dmg
+dist/Desktop Authenticator-1.0.0-arm64-mac.zip
+dist/Desktop Authenticator-1.0.0-arm64-mac.zip
+dist/Desktop Authenticator-1.0.0-arm64-mac.zip.blockmap
+dist/Desktop Authenticator-1.0.0-arm64.dmg
