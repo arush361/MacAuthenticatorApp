@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Desktop Authenticator</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+        body {
+            font-family: 'VT323', monospace;
+            margin: 0;
+            padding: 20px;
+            background-color: #1D1F21;
+            color: #ffffff;
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.7) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.7) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: #373737;
+            padding: 15px;
+            border: 3px solid #1D1F21;
+            box-shadow: inset -2px -2px 0px #1D1F21, inset 2px 2px 0px #808080;
+        }
+
+        .header h1 {
+            color: #55FF55;
+            font-size: 32px;
+            text-shadow: 2px 2px #1D1F21;
+            margin: 0;
+            letter-spacing: 2px;
+        }
+
+        .add-button {
+            background-color: #5C5C5C;
+            color: white;
+            border: 3px solid #1D1F21;
+            padding: 8px 16px;
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: inset -2px -2px 0px #1D1F21, inset 2px 2px 0px #808080;
+            text-transform: uppercase;
+            transition: all 0.1s;
+        }
+
+        .add-button:hover {
+            background-color: #707070;
+            transform: scale(1.05);
+        }
+
+        .add-button:active {
+            box-shadow: inset 2px 2px 0px #1D1F21, inset -2px -2px 0px #808080;
+            transform: scale(0.95);
+        }
+
+        .accounts-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .account-card {
+            background: #373737;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            align-items: center;
+            gap: 15px;
+            border: 3px solid #1D1F21;
+            box-shadow: inset -2px -2px 0px #1D1F21, inset 2px 2px 0px #808080;
+            transition: transform 0.2s;
+        }
+
+        .account-card:hover {
+            transform: translateY(-2px);
+            background: #404040;
+        }
+
+        .account-info h3 {
+            margin: 0;
+            color: #FFFF55;
+            font-size: 24px;
+            text-shadow: 1px 1px #1D1F21;
+        }
+
+        .account-info p {
+            margin: 5px 0 0;
+            color: #AAAAAA;
+            font-size: 18px;
+        }
+
+        .totp-code {
+            font-family: 'VT323', monospace;
+            font-size: 32px;
+            color: #55FFFF;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px #1D1F21;
+            padding: 5px 10px;
+            background: #2D2D2D;
+            border: 2px solid #1D1F21;
+            box-shadow: inset -1px -1px 0px #1D1F21, inset 1px 1px 0px #808080;
+        }
+
+        .action-buttons button {
+            background: #AA0000;
+            border: 2px solid #1D1F21;
+            color: white;
+            cursor: pointer;
+            padding: 5px 10px;
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            box-shadow: inset -2px -2px 0px #1D1F21, inset 2px 2px 0px #FF5555;
+            text-transform: uppercase;
+        }
+
+        .action-buttons button:hover {
+            background: #CC0000;
+        }
+
+        .action-buttons button:active {
+            box-shadow: inset 2px 2px 0px #1D1F21, inset -2px -2px 0px #FF5555;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background: #373737;
+            width: 90%;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 3px solid #1D1F21;
+            box-shadow: inset -2px -2px 0px #1D1F21, inset 2px 2px 0px #808080;
+        }
+
+        .modal-content h2 {
+            color: #55FF55;
+            margin-top: 0;
+            font-size: 28px;
+            text-shadow: 2px 2px #1D1F21;
+            text-transform: uppercase;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #FFFF55;
+            font-size: 20px;
+            text-shadow: 1px 1px #1D1F21;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #1D1F21;
+            font-size: 18px;
+            background: #2D2D2D;
+            color: #ffffff;
+            font-family: 'VT323', monospace;
+            box-shadow: inset -1px -1px 0px #808080, inset 1px 1px 0px #1D1F21;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #55FF55;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            padding: 8px 16px;
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            cursor: pointer;
+            text-transform: uppercase;
+            border: 2px solid #1D1F21;
+        }
+
+        .modal-buttons button.cancel {
+            background: #AA0000;
+            color: white;
+            box-shadow: inset -2px -2px 0px #1D1F21, inset 2px 2px 0px #FF5555;
+        }
+
+        .modal-buttons button.cancel:hover {
+            background: #CC0000;
+        }
+
+        .modal-buttons button.save {
+            background: #00AA00;
+            color: white;
+            box-shadow: inset -2px -2px 0px #1D1F21, inset 2px 2px 0px #55FF55;
+        }
+
+        .modal-buttons button.save:hover {
+            background: #00CC00;
+        }
+
+        .modal-buttons button:active {
+            transform: scale(0.95);
+        }
+
+        #qr-reader {
+            width: 100%;
+            margin-top: 10px;
+            background: #2D2D2D;
+            padding: 10px;
+            border: 2px solid #1D1F21;
+            box-shadow: inset -1px -1px 0px #808080, inset 1px 1px 0px #1D1F21;
+        }
+
+        input[type="file"] {
+            color: #AAAAAA;
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+        }
+
+        ::placeholder {
+            color: #707070;
+            font-family: 'VT323', monospace;
+        }
+
+        /* Minecraft-style scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+            background: #2D2D2D;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #5C5C5C;
+            border: 2px solid #1D1F21;
+            box-shadow: inset -1px -1px 0px #1D1F21, inset 1px 1px 0px #808080;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #707070;
+        }
+
+        #drop-zone {
+            border: 2px dashed #55FF55;
+            padding: 20px;
+            text-align: center;
+            background: #2D2D2D;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        #drop-zone.drag-over {
+            background: #3D3D3D;
+            border-color: #FFFF55;
+        }
+
+        #drop-zone p {
+            margin: 0;
+            color: #AAAAAA;
+            font-size: 16px;
+        }
+
+        #drop-zone .highlight {
+            color: #55FF55;
+            font-weight: bold;
+        }
+
+        .shortcut {
+            display: inline-block;
+            background: #3D3D3D;
+            padding: 2px 6px;
+            border: 1px solid #55FF55;
+            margin: 0 2px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            background: #2D2D2D;
+            border: 2px dashed #55FF55;
+            margin: 20px 0;
+        }
+
+        .empty-state p {
+            margin: 10px 0;
+            color: #AAAAAA;
+            font-size: 18px;
+        }
+
+        .empty-state p:first-child {
+            color: #55FF55;
+            font-size: 24px;
+        }
+
+        .error {
+            color: #ff453a !important;
+            text-shadow: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Desktop Authenticator</h1>
+            <button class="add-button" onclick="showAddModal()">Add Account</button>
+        </div>
+
+        <div id="accounts-list" class="accounts-list">
+            <!-- Accounts will be populated here -->
+        </div>
+    </div>
+
+    <!-- Add Account Modal -->
+    <div id="add-modal" class="modal">
+        <div class="modal-content">
+            <h2>Add New Account</h2>
+            <div class="input-group">
+                <label>Account Name</label>
+                <input type="text" id="account-name" placeholder="e.g., Google, GitHub">
+            </div>
+            <div class="input-group">
+                <label>Issuer (Optional)</label>
+                <input type="text" id="issuer" placeholder="e.g., Google">
+            </div>
+            <div class="input-group">
+                <label>Secret Key</label>
+                <input type="text" id="secret" placeholder="Enter TOTP secret">
+            </div>
+            <div class="input-group">
+                <label>Or Add QR Code</label>
+                <input type="file" id="qr-input" accept="image/*">
+                <div id="drop-zone">
+                    <p>Drag & drop a screenshot here</p>
+                    <p>or <span class="highlight">paste</span> from clipboard (<span class="shortcut">⌘V</span>)</p>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="cancel" onclick="hideAddModal()">Cancel</button>
+                <button class="save" onclick="saveAccount()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html> 
